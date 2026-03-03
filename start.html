@@ -90,7 +90,7 @@ document.getElementById("sendBtn").addEventListener("click", function () {
         startCar: document.getElementById("startCar").value
     };
 
-    fetch("YOUR_GAS_WEBAPP_URL", {
+    fetch("https://script.google.com/macros/s/AKfycbw5Uq5Js5cgkIJr6xfFWCfbmytdqIVT_hJplk65JpmbnS1EsNyRVPRg2aPVrrOQuZAG9Q/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
