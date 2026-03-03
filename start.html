@@ -100,7 +100,7 @@ document.getElementById("sendBtn").addEventListener("click", function () {
         localStorage.setItem("row", res.row);
         alert("開始を記録しました！\n行番号: " + res.row);
     })
-    .catch(() => alert("送信エラー。URLやGAS設定を確認してください。"));
+    .catch(() => alert("送信エラー。GASのURLやアクセス権を確認してください。"));
 });
 </script>
 
