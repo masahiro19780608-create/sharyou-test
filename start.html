@@ -3,104 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>開始記録</title>
+<title>車両利用記録アプリ</title>
 <style>
-    body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
-    h2 { background: #007bff; color: white; padding: 8px; border-radius: 5px; }
-    .block { background: white; padding: 12px; margin-bottom: 18px; border-radius: 8px; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, select {
-        width: 100%; padding: 8px; margin-top: 4px;
-        border: 1px solid #ccc; border-radius: 5px;
-    }
-    button {
-        width: 100%; padding: 12px; background: #28a745; color: white;
-        border: none; border-radius: 8px; font-size: 18px;
-    }
+  body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
+  h1 { background: #007bff; color: white; padding: 10px; border-radius: 5px; }
+  .menu button { width: 100%; padding: 15px; margin: 10px 0; font-size: 18px; border-radius: 5px; }
+  .section { display: none; background: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+  button.submitBtn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; margin-top: 15px; }
+  iframe { width: 100%; height: 500px; border: 1px solid #ccc; border-radius: 5px; }
 </style>
 </head>
 <body>
 
-<h1>開始記録</h1>
+<h1>車両利用記録アプリ</h1>
 
-<div class="block">
-    <label>日付</label>
-    <input type="date" id="date">
-
-    <label>開始時刻</label>
-    <input type="time" id="startTime">
-
-    <label>運転者名</label>
-    <input type="text" id="driver">
-
-    <label>車両番号</label>
-    <input type="text" id="carNumber">
-
-    <label>睡眠時間</label>
-    <input type="text" id="sleep">
-
-    <label>開始Alc</label>
-    <select id="startAlc">
-        <option value="OK">OK</option>
-        <option value="NG">NG</option>
-    </select>
-
-    <label>薬の服用</label>
-    <select id="medicine">
-        <option value="無">無</option>
-        <option value="有">有</option>
-    </select>
-
-    <label>薬による眠気</label>
-    <select id="sleepy">
-        <option value="無">無</option>
-        <option value="有">有</option>
-    </select>
-
-    <label>開始体調</label>
-    <select id="startCond">
-        <option value="良">良</option>
-        <option value="普通">普通</option>
-        <option value="悪い">悪い</option>
-    </select>
-
-    <label>開始車両状態</label>
-    <select id="startCar">
-        <option value="正常">正常</option>
-        <option value="異常">異常</option>
-    </select>
+<div class="menu">
+  <button onclick="showSection('start')">開始入力</button>
+  <button onclick="showSection('list')">一覧を見る</button>
 </div>
 
-<button id="sendBtn">開始を送信</button>
+<!-- 開始入力 -->
+<div id="start" class="section">
+  <label>日付</label>
+  <input type="date" id="date">
+
+  <label>開始時刻</label>
+  <input type="time" id="startTime">
+
+  <label>運転者名</label>
+  <select id="driver">
+    <option value="">選択してください</option>
+  </select>
+
+  <label>車両番号</label>
+  <select id="carNumber">
+    <option value="">選択してください</option>
+  </select>
+
+  <label>睡眠時間（時間）</label>
+  <input type="number" id="sleep">
+
+  <label>開始Alc</label>
+  <input type="number" step="0.01" id="startAlc" placeholder="例: 0.00">
+
+  <label>薬の服用</label>
+  <select id="medicine">
+    <option value="">選択してください</option>
+    <option value="無">無</option>
+    <option value="有">有</option>
+  </select>
+
+  <label>薬による眠気</label>
+  <select id="sleepy">
+    <option value="">選択してください</option>
+    <option value="無">無</option>
+    <option value="有">有</option>
+  </select>
+
+  <label>開始体調</label>
+  <select id="startCond">
+    <option value="">選択してください</option>
+    <option value="良">良</option>
+    <option value="普通">普通</option>
+    <option value="悪い">悪い</option>
+  </select>
+
+  <label>開始車両状態</label>
+  <select id="startCar">
+    <option value="">選択してください</option>
+    <option value="正常">正常</option>
+    <option value="異常">異常</option>
+  </select>
+
+  <button class="submitBtn" id="sendBtn">開始を送信</button>
+</div>
+
+<!-- 一覧表示 -->
+<div id="list" class="section">
+  <h2>一覧（閲覧制限あり）</h2>
+  <iframe src="https://docs.google.com/spreadsheets/d/11vCUo1wExmJN8KIoLtuUXEBL1g1nKmoCyX-HbgOA_nM/preview"></iframe>
+  <p>※ この一覧はGoogleスプレッドシート側で閲覧制限を設定してください</p>
+</div>
 
 <script>
+// 運転者リスト（修正済み）
+const users = [
+  "岡山和徳","土田一樹","中野昌広","高橋徹","中山怜",
+  "目敏彦","江澤現之","藤本晴樹","中野桂子","田平友美"
+];
+
+// 車両番号リスト
+const cars = [
+  "11-00(セレナ)","11-55(セレナ)","84-62","52-78","71-71",
+  "27-01","03-54","02-12(軽トラ)","16-96(軽トラ)","27-70(2tDT)","10-95(4ｔ)","79-55"
+];
+
+// ページロード時にリストをセット
+window.onload = () => {
+  const driverSelect = document.getElementById("driver");
+  users.forEach(u => driverSelect.innerHTML += `<option value="${u}">${u}</option>`);
+
+  const carSelect = document.getElementById("carNumber");
+  cars.forEach(c => carSelect.innerHTML += `<option value="${c}">${c}</option>`);
+
+  showSection('start');
+};
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+}
+
+// 送信処理
 document.getElementById("sendBtn").addEventListener("click", function () {
+  const date = document.getElementById("date").value;
+  const startTime = document.getElementById("startTime").value;
+  const driver = document.getElementById("driver").value;
+  const carNumber = document.getElementById("carNumber").value;
+  const startAlc = document.getElementById("startAlc").value;
 
-    const data = {
-        mode: "start",
-        date: document.getElementById("date").value,
-        startTime: document.getElementById("startTime").value,
-        driver: document.getElementById("driver").value,
-        carNumber: document.getElementById("carNumber").value,
-        sleep: document.getElementById("sleep").value,
-        startAlc: document.getElementById("startAlc").value,
-        medicine: document.getElementById("medicine").value,
-        sleepy: document.getElementById("sleepy").value,
-        startCond: document.getElementById("startCond").value,
-        startCar: document.getElementById("startCar").value
-    };
+  if (!date || !startTime || !driver || !carNumber || startAlc === "") {
+    alert("必須項目を入力してください");
+    return;
+  }
 
-    fetch("https://script.google.com/macros/s/AKfycby2FHYrGQ-Y7ElscgY1CaRWNBLoccgU8ZZx5G6grFpjcZeRLHvFLPxpGgpGrkbHitahNg/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-        localStorage.setItem("row", res.row);
-        alert("開始を記録しました！\n行番号: " + res.row);
-    })
-    .catch(() => alert("送信エラー。GASのURLやアクセス権を確認してください。"));
+  const data = {
+    mode: "start",
+    date,
+    startTime,
+    driver,
+    carNumber,
+    sleep: document.getElementById("sleep").value,
+    startAlc,
+    medicine: document.getElementById("medicine").value,
+    sleepy: document.getElementById("sleepy").value,
+    startCond: document.getElementById("startCond").value,
+    startCar: document.getElementById("startCar").value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbz35iwCUV7__FD8g4f-YdYXWB6v1z_mpVsPUpwX5xXFtbZtWwDPq8bnGCiVb9Frhah6PQ/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    localStorage.setItem("row", res.row);
+    alert("開始を記録しました！\n行番号: " + res.row);
+    // フォームリセット
+    document.getElementById("date").value = "";
+    document.getElementById("startTime").value = "";
+    document.getElementById("driver").value = "";
+    document.getElementById("carNumber").value = "";
+    document.getElementById("sleep").value = "";
+    document.getElementById("startAlc").value = "";
+  })
+  .catch(err => {
+    console.error("送信エラー:", err);
+    alert("送信エラーが発生しました。GASのURLと公開設定を確認してください。");
+  });
 });
 </script>
 
