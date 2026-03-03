@@ -7,25 +7,17 @@
 <style>
   body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
   h1 { background: #007bff; color: white; padding: 10px; border-radius: 5px; }
-  .menu button { width: 100%; padding: 15px; margin: 10px 0; font-size: 18px; border-radius: 5px; }
-  .section { display: none; background: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+  .section { background: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
   label { display: block; margin-top: 10px; font-weight: bold; }
-  input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+  input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
   button.submitBtn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; margin-top: 15px; }
-  iframe { width: 100%; height: 500px; border: 1px solid #ccc; border-radius: 5px; }
 </style>
 </head>
 <body>
 
-<h1>車両利用記録アプリ</h1>
+<h1>車両利用記録 - 開始入力</h1>
 
-<div class="menu">
-  <button onclick="showSection('start')">開始入力</button>
-  <button onclick="showSection('list')">一覧を見る</button>
-</div>
-
-<!-- 開始入力 -->
-<div id="start" class="section">
+<div class="section">
   <label>日付</label>
   <input type="date" id="date">
 
@@ -80,13 +72,6 @@
   <button class="submitBtn" id="sendBtn">開始を送信</button>
 </div>
 
-<!-- 一覧表示 -->
-<div id="list" class="section">
-  <h2>一覧（閲覧制限あり）</h2>
-  <iframe src="https://docs.google.com/spreadsheets/d/11vCUo1wExmJN8KIoLtuUXEBL1g1nKmoCyX-HbgOA_nM/preview"></iframe>
-  <p>※ この一覧はGoogleスプレッドシート側で閲覧制限を設定してください</p>
-</div>
-
 <script>
 // 運転者リスト（修正済み）
 const users = [
@@ -107,14 +92,7 @@ window.onload = () => {
 
   const carSelect = document.getElementById("carNumber");
   cars.forEach(c => carSelect.innerHTML += `<option value="${c}">${c}</option>`);
-
-  showSection('start');
 };
-
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-}
 
 // 送信処理
 document.getElementById("sendBtn").addEventListener("click", function () {
@@ -124,6 +102,7 @@ document.getElementById("sendBtn").addEventListener("click", function () {
   const carNumber = document.getElementById("carNumber").value;
   const startAlc = document.getElementById("startAlc").value;
 
+  // 必須項目チェック
   if (!date || !startTime || !driver || !carNumber || startAlc === "") {
     alert("必須項目を入力してください");
     return;
@@ -143,6 +122,7 @@ document.getElementById("sendBtn").addEventListener("click", function () {
     startCar: document.getElementById("startCar").value
   };
 
+  // ここに最新GAS URLを入れる
   fetch("https://script.google.com/macros/s/AKfycbz35iwCUV7__FD8g4f-YdYXWB6v1z_mpVsPUpwX5xXFtbZtWwDPq8bnGCiVb9Frhah6PQ/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
