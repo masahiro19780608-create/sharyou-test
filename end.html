@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>終了記録</title>
+<style>
+body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
+h1 { background: #dc3545; color: white; padding: 8px; border-radius: 5px; }
+.block { background: white; padding: 12px; margin-bottom: 18px; border-radius: 8px; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+textarea { height: 80px; }
+button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<h1>終了記録</h1>
+
+<div class="block">
+    <label>終了時刻</label>
+    <input type="time" id="endTime">
+
+    <label>終了Alc</label>
+    <input type="text" id="endAlc">
+
+    <label>終了体調</label>
+    <select id="endCond">
+        <option>良</option>
+        <option>普通</option>
+        <option>悪い</option>
+    </select>
+
+    <label>終了車両状態</label>
+    <select id="endCar">
+        <option>正常</option>
+        <option>異常</option>
+    </select>
+
+    <label>出発</label>
+    <input type="text" id="dep">
+
+    <label>経由1</label>
+    <input type="text" id="via1">
+
+    <label>経由2</label>
+    <input type="text" id="via2">
+
+    <label>到着</label>
+    <input type="text" id="arr">
+
+    <label>経路</label>
+    <textarea id="route"></textarea>
+
+    <label>備考</label>
+    <textarea id="note"></textarea>
+</div>
+
+<button id="sendBtn">終了を送信</button>
+
+<script>
+document.getElementById("sendBtn").addEventListener("click", function () {
+    const data = {
+        mode: "end",
+        row: localStorage.getItem("row"),
+        endTime: document.getElementById("endTime").value,
+        endAlc: document.getElementById("endAlc").value,
+        endCond: document.getElementById("endCond").value,
+        endCar: document.getElementById("endCar").value,
+        dep: document.getElementById("dep").value,
+        via1: document.getElementById("via1").value,
+        via2: document.getElementById("via2").value,
+        arr: document.getElementById("arr").value,
+        route: document.getElementById("route").value,
+        note: document.getElementById("note").value
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbzXJp2K1ZrtCXFfObbRB786ZNVqLqgnXunpZ46-LqTVE67DkEH2XR0BFzb-r7Wv1FGcvA/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(res => alert("終了を記録しました！"))
+    .catch(() => alert("送信エラー。GASのURLやアクセス権を確認してください。"));
+});
+</script>
+
+</body>
+</html>
