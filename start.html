@@ -122,8 +122,8 @@ document.getElementById("sendBtn").addEventListener("click", function () {
     startCar: document.getElementById("startCar").value
   };
 
-  // ここに最新GAS URLを入れる
-  fetch("https://script.google.com/macros/s/AKfycbz35iwCUV7__FD8g4f-YdYXWB6v1z_mpVsPUpwX5xXFtbZtWwDPq8bnGCiVb9Frhah6PQ/exec", {
+  // 最新GAS URLをここに貼る
+  fetch("https://script.google.com/macros/s/AKfycbyZUa2cV_iadxPZO9AYvVOgaV74E83Xezs4QxjxhX75prCgT2v9iNgvFCyIBu7j0j2t-Q/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
