@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>開始記録</title>
 <style>
-body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
-h1 { background: #007bff; color: white; padding: 8px; border-radius: 5px; }
-.block { background: white; padding: 12px; margin-bottom: 18px; border-radius: 8px; }
-label { display: block; margin-top: 10px; font-weight: bold; }
-input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
-button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; }
+    body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
+    h1 { background: #007bff; color: white; padding: 10px; border-radius: 5px; }
+    .block { background: white; padding: 12px; margin-bottom: 18px; border-radius: 8px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    select, input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+    button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; }
 </style>
 </head>
 <body>
@@ -57,28 +57,32 @@ button { width: 100%; padding: 12px; background: #28a745; color: white; border: 
     </select>
 
     <label>睡眠時間</label>
-    <input type="text" id="sleep">
+    <input type="number" id="sleep" min="0" placeholder="時間">
 
     <label>開始Alc</label>
     <select id="startAlc">
+        <option value="">選択してください</option>
         <option>OK</option>
         <option>NG</option>
     </select>
 
     <label>薬の服用</label>
     <select id="medicine">
+        <option value="">選択してください</option>
         <option>無</option>
         <option>有</option>
     </select>
 
     <label>薬による眠気</label>
     <select id="sleepy">
+        <option value="">選択してください</option>
         <option>無</option>
         <option>有</option>
     </select>
 
     <label>開始体調</label>
     <select id="startCond">
+        <option value="">選択してください</option>
         <option>良</option>
         <option>普通</option>
         <option>悪い</option>
@@ -86,6 +90,7 @@ button { width: 100%; padding: 12px; background: #28a745; color: white; border: 
 
     <label>開始車両状態</label>
     <select id="startCar">
+        <option value="">選択してください</option>
         <option>正常</option>
         <option>異常</option>
     </select>
@@ -94,7 +99,19 @@ button { width: 100%; padding: 12px; background: #28a745; color: white; border: 
 <button id="sendBtn">開始を送信</button>
 
 <script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycby3O8Hz6TN83cXqDSSlN3r2eAKvp9QYnnqk_GNN50ydK5mPVcpbM4c_xr-ACNua2ujlBQ/exec";
+
 document.getElementById("sendBtn").addEventListener("click", function () {
+
+    // 必須入力チェック
+    const requiredIds = ["date","startTime","driver","carNumber","sleep","startAlc","medicine","sleepy","startCond","startCar"];
+    for (let id of requiredIds) {
+        if (!document.getElementById(id).value) {
+            alert("「" + id + "」を入力してください");
+            return;
+        }
+    }
+
     const data = {
         mode: "start",
         date: document.getElementById("date").value,
@@ -109,18 +126,24 @@ document.getElementById("sendBtn").addEventListener("click", function () {
         startCar: document.getElementById("startCar").value
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbyXh1ZJbE1Smx56tBxKOiP1ie6b6vNTRfUsb-WeZJfGFVX-q_85xyE8AWqtT9Rkl7_L9w/exec", {
+    fetch(GAS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
     .then(res => res.json())
     .then(res => {
-        localStorage.setItem("row", res.row);
-        alert("開始を記録しました！\n行番号: " + res.row);
-        window.location.href = "end.html";
+        if (res.error) {
+            alert("エラー: " + res.error);
+        } else {
+            localStorage.setItem("row", res.row);
+            alert("開始を記録しました！\n行番号: " + res.row);
+        }
     })
-    .catch(() => alert("送信エラー。GASのURLやアクセス権を確認してください。"));
+    .catch(err => {
+        console.error(err);
+        alert("送信エラーが発生しました。GASのURLと公開設定を確認してください。");
+    });
 });
 </script>
 
