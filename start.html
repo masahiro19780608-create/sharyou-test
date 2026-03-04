@@ -3,147 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>車両利用記録アプリ</title>
+<title>開始記録</title>
 <style>
-  body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
-  h1 { background: #007bff; color: white; padding: 10px; border-radius: 5px; }
-  .section { background: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
-  label { display: block; margin-top: 10px; font-weight: bold; }
-  input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
-  button.submitBtn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; margin-top: 15px; }
+body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
+h1 { background: #007bff; color: white; padding: 8px; border-radius: 5px; }
+.block { background: white; padding: 12px; margin-bottom: 18px; border-radius: 8px; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; }
 </style>
 </head>
 <body>
 
-<h1>車両利用記録 - 開始入力</h1>
+<h1>開始記録</h1>
 
-<div class="section">
-  <label>日付</label>
-  <input type="date" id="date">
+<div class="block">
+    <label>日付</label>
+    <input type="date" id="date">
 
-  <label>開始時刻</label>
-  <input type="time" id="startTime">
+    <label>開始時刻</label>
+    <input type="time" id="startTime">
 
-  <label>運転者名</label>
-  <select id="driver">
-    <option value="">選択してください</option>
-  </select>
+    <label>運転者名</label>
+    <select id="driver">
+        <option value="">選択してください</option>
+        <option>岡山和徳</option>
+        <option>土田一樹</option>
+        <option>中野昌広</option>
+        <option>高橋徹</option>
+        <option>中山怜</option>
+        <option>目敏彦</option>
+        <option>江澤現之</option>
+        <option>藤本晴樹</option>
+        <option>中野桂子</option>
+        <option>田平友美</option>
+    </select>
 
-  <label>車両番号</label>
-  <select id="carNumber">
-    <option value="">選択してください</option>
-  </select>
+    <label>車両番号</label>
+    <select id="carNumber">
+        <option value="">選択してください</option>
+        <option>11-00(セレナ)</option>
+        <option>11-55(セレナ)</option>
+        <option>84-62</option>
+        <option>52-78</option>
+        <option>71-71</option>
+        <option>27-01</option>
+        <option>03-54</option>
+        <option>02-12(軽トラ)</option>
+        <option>16-96(軽トラ)</option>
+        <option>27-70(2tDT)</option>
+        <option>10-95(4t)</option>
+        <option>79-55</option>
+    </select>
 
-  <label>睡眠時間（時間）</label>
-  <input type="number" id="sleep">
+    <label>睡眠時間</label>
+    <input type="text" id="sleep">
 
-  <label>開始Alc</label>
-  <input type="number" step="0.01" id="startAlc" placeholder="例: 0.00">
+    <label>開始Alc</label>
+    <select id="startAlc">
+        <option>OK</option>
+        <option>NG</option>
+    </select>
 
-  <label>薬の服用</label>
-  <select id="medicine">
-    <option value="">選択してください</option>
-    <option value="無">無</option>
-    <option value="有">有</option>
-  </select>
+    <label>薬の服用</label>
+    <select id="medicine">
+        <option>無</option>
+        <option>有</option>
+    </select>
 
-  <label>薬による眠気</label>
-  <select id="sleepy">
-    <option value="">選択してください</option>
-    <option value="無">無</option>
-    <option value="有">有</option>
-  </select>
+    <label>薬による眠気</label>
+    <select id="sleepy">
+        <option>無</option>
+        <option>有</option>
+    </select>
 
-  <label>開始体調</label>
-  <select id="startCond">
-    <option value="">選択してください</option>
-    <option value="良">良</option>
-    <option value="普通">普通</option>
-    <option value="悪い">悪い</option>
-  </select>
+    <label>開始体調</label>
+    <select id="startCond">
+        <option>良</option>
+        <option>普通</option>
+        <option>悪い</option>
+    </select>
 
-  <label>開始車両状態</label>
-  <select id="startCar">
-    <option value="">選択してください</option>
-    <option value="正常">正常</option>
-    <option value="異常">異常</option>
-  </select>
-
-  <button class="submitBtn" id="sendBtn">開始を送信</button>
+    <label>開始車両状態</label>
+    <select id="startCar">
+        <option>正常</option>
+        <option>異常</option>
+    </select>
 </div>
 
+<button id="sendBtn">開始を送信</button>
+
 <script>
-// 運転者リスト（修正済み）
-const users = [
-  "岡山和徳","土田一樹","中野昌広","高橋徹","中山怜",
-  "目敏彦","江澤現之","藤本晴樹","中野桂子","田平友美"
-];
-
-// 車両番号リスト
-const cars = [
-  "11-00(セレナ)","11-55(セレナ)","84-62","52-78","71-71",
-  "27-01","03-54","02-12(軽トラ)","16-96(軽トラ)","27-70(2tDT)","10-95(4ｔ)","79-55"
-];
-
-// ページロード時にリストをセット
-window.onload = () => {
-  const driverSelect = document.getElementById("driver");
-  users.forEach(u => driverSelect.innerHTML += `<option value="${u}">${u}</option>`);
-
-  const carSelect = document.getElementById("carNumber");
-  cars.forEach(c => carSelect.innerHTML += `<option value="${c}">${c}</option>`);
-};
-
-// 送信処理
 document.getElementById("sendBtn").addEventListener("click", function () {
-  const date = document.getElementById("date").value;
-  const startTime = document.getElementById("startTime").value;
-  const driver = document.getElementById("driver").value;
-  const carNumber = document.getElementById("carNumber").value;
-  const startAlc = document.getElementById("startAlc").value;
+    const data = {
+        mode: "start",
+        date: document.getElementById("date").value,
+        startTime: document.getElementById("startTime").value,
+        driver: document.getElementById("driver").value,
+        carNumber: document.getElementById("carNumber").value,
+        sleep: document.getElementById("sleep").value,
+        startAlc: document.getElementById("startAlc").value,
+        medicine: document.getElementById("medicine").value,
+        sleepy: document.getElementById("sleepy").value,
+        startCond: document.getElementById("startCond").value,
+        startCar: document.getElementById("startCar").value
+    };
 
-  // 必須項目チェック
-  if (!date || !startTime || !driver || !carNumber || startAlc === "") {
-    alert("必須項目を入力してください");
-    return;
-  }
-
-  const data = {
-    mode: "start",
-    date,
-    startTime,
-    driver,
-    carNumber,
-    sleep: document.getElementById("sleep").value,
-    startAlc,
-    medicine: document.getElementById("medicine").value,
-    sleepy: document.getElementById("sleepy").value,
-    startCond: document.getElementById("startCond").value,
-    startCar: document.getElementById("startCar").value
-  };
-
-  // 最新GAS URL
-  fetch("https://script.google.com/macros/s/AKfycbyZUa2cV_iadxPZO9AYvVOgaV74E83Xezs4QxjxhX75prCgT2v9iNgvFCyIBu7j0j2t-Q/exec", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    localStorage.setItem("row", res.row);
-    alert("開始を記録しました！\n行番号: " + res.row);
-    // フォームリセット
-    document.getElementById("date").value = "";
-    document.getElementById("startTime").value = "";
-    document.getElementById("driver").value = "";
-    document.getElementById("carNumber").value = "";
-    document.getElementById("sleep").value = "";
-    document.getElementById("startAlc").value = "";
-  })
-  .catch(err => {
-    console.error("送信エラー:", err);
-    alert("送信エラーが発生しました。GASのURLと公開設定を確認してください。");
-  });
+    fetch("https://script.google.com/macros/s/AKfycbyXh1ZJbE1Smx56tBxKOiP1ie6b6vNTRfUsb-WeZJfGFVX-q_85xyE8AWqtT9Rkl7_L9w/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(res => {
+        localStorage.setItem("row", res.row);
+        alert("開始を記録しました！\n行番号: " + res.row);
+    })
+    .catch(() => alert("送信エラー。GASのURLやアクセス権を確認してください。"));
 });
 </script>
 
