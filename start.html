@@ -6,11 +6,11 @@
 <title>開始記録</title>
 <style>
     body { font-family: sans-serif; padding: 15px; background: #f5f5f5; }
-    h1 { background: #007bff; color: white; padding: 10px; border-radius: 5px; }
+    h1 { background: #007bff; color: white; padding: 10px; border-radius: 5px; text-align: center; }
     .block { background: white; padding: 12px; margin-bottom: 18px; border-radius: 8px; }
     label { display: block; margin-top: 10px; font-weight: bold; }
     select, input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
-    button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; }
+    button { width: 100%; padding: 12px; margin-top: 15px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; }
 </style>
 </head>
 <body>
@@ -56,8 +56,8 @@
         <option>79-55</option>
     </select>
 
-    <label>睡眠時間</label>
-    <input type="number" id="sleep" min="0" placeholder="時間">
+    <label>睡眠時間（時間）</label>
+    <input type="number" id="sleep" min="0" placeholder="例：6">
 
     <label>開始Alc</label>
     <select id="startAlc">
@@ -99,7 +99,7 @@
 <button id="sendBtn">開始を送信</button>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycby3O8Hz6TN83cXqDSSlN3r2eAKvp9QYnnqk_GNN50ydK5mPVcpbM4c_xr-ACNua2ujlBQ/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxblRH83J7iZCgnwGHYi91J8Abet-TNVXXU1Xy177yp_VZbQ8l7sVqaN-_cs6jIcyQcqA/exec";
 
 document.getElementById("sendBtn").addEventListener("click", function () {
 
@@ -142,7 +142,7 @@ document.getElementById("sendBtn").addEventListener("click", function () {
     })
     .catch(err => {
         console.error(err);
-        alert("送信エラーが発生しました。GASのURLや公開設定を確認してください。");
+        alert("送信エラーが発生しました。\nGASのURLや公開設定を確認してください。");
     });
 });
 </script>
